@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root{
+    --h1Space:30px;
+    --h1FontSize:6em;
+}
+
+body{
+    font-family: "Edu TAS Beginner", cursive;
+}
+
+header{
+
+background-image: url("../img/wall.png");
+}
+
+main{
+    background-image: url("../img/cork.png");
+}
+/* header */
+h1{
+    text-transform: uppercase;
+    text-align: center;
+    font-size: var(--h1FontSize);
+    padding: var(--h1Space) 0px;
+}
+/* main */
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
