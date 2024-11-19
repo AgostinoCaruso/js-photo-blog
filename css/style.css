@@ -3,9 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
-.debugger{
+/* .debugger{
     border: 5px solid red;
-}
+} */
 :root{
     --h1Space:30px;
     --smallFontSize:2em;
@@ -37,7 +37,6 @@ h1{
 }
 .card{
     margin: 30px 20px;
-    /* height: 300px; */
     width: calc(( 100% - (3 * 44px) ) / 3);
     background-color: white;
     padding: var(--cardSpace) var(--cardSpace);
@@ -77,6 +76,7 @@ h1{
 .card:hover .pinAbsolute{
     display: none;
 }
+
 @media screen and (max-width:1200px) {
     
 }
