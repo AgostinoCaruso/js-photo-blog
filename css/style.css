@@ -3,23 +3,21 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 :root{
     --h1Space:30px;
     --h1FontSize:6em;
+    --cardSpace:20px;
 }
-
 body{
     font-family: "Edu TAS Beginner", cursive;
+    background-image: url("../img/cork.png");
 }
-
 header{
 
 background-image: url("../img/wall.png");
 }
-
 main{
-    background-image: url("../img/cork.png");
+    margin-top: 30px;
 }
 /* header */
 h1{
@@ -32,4 +30,31 @@ h1{
 .container{
     max-width: 1200px;
     margin: 0 auto;
+}
+.card{
+    margin: 30px 20px;
+    width: calc(( 100% - (3 * 44px) ) / 3);
+    background-color: white;
+    padding: var(--cardSpace) var(--cardSpace);
+    display: inline-block;
+    box-shadow: 2px 2px 1px black;
+    position: relative;
+    transition: all .6s ease-in;
+    transform: scale(0.9);
+}
+.card:hover{
+    transform: scale(1.5) rotate(45deg);
+    box-shadow: 2px 2px 100px black;
+}
+.card img{
+    width: 100%;
+}
+.pinAbsolute{
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.card:hover .pinAbsolute{
+    display: none;
 }
