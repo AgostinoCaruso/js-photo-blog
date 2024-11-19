@@ -19,17 +19,21 @@ const numImg = 6;
 const params = { "_limit": numImg };
 
 const eleDivContainer = document.querySelector(".container");
+const eleOverlay = document.querySelector(".overlay");
+
 FuncAxios();
 function FuncAxios() {
     axios.get(baseUrl + resource, { params })
         .then((response) => {
             const photos = response.data;
 
-            photos.forEach(photo => {
-                const urlImg = photo.url;
-                const urlText = photo.title;
-                CreateCard(urlImg, urlText);
-            });
+            for(let i = 0; i<photos.length; i++){
+                const urlImg = photos[i].url;
+                const urlText = photos[i].title;
+                const urlTextUppercase = urlText.charAt(0).toUpperCase() + urlText.slice(1);
+                
+                CreateCard(urlImg, urlTextUppercase);
+            }
         })
         .catch((error) => {
             console.error("Errore nella chiamata API:", error);
@@ -37,10 +41,11 @@ function FuncAxios() {
 }
 const template = "";
 
-function CreateCard(img,text) {
+function CreateCard(img, text) {
+    const card = document.createElement("div");
+    card.className = "card debugger";
 
-    const cardTemplate = `
-    <div class="card debugger">
+    card.innerHTML = `
         <span class="pinAbsolute"><img src="./img/pin.svg" alt=""></span>
         <div class="card-img debugger">
             <img src="${img}" alt="test">
@@ -48,19 +53,24 @@ function CreateCard(img,text) {
         <div class="card-text debugger">
             ${text}
         </div>
-    </div>
     `;
-    eleDivContainer.innerHTML +=cardTemplate;
+    eleDivContainer.appendChild(card);
+
+    let isCentered = false;
+
+    card.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        const elePin = card.querySelector(".pinAbsolute");
+        elePin.classList.toggle("my-d-none"); 
+        eleOverlay.classList.toggle("my-d-none");
+
+        if (!isCentered) {
+            card.classList.add("centered");
+        } else {
+            card.classList.remove("centered");
+        }
+
+        isCentered = !isCentered; // Alterna lo stato
+    });
 }
-/*
-    <div class="card debugger">
-        <span class="pinAbsolute"><img src="./img/pin.svg" alt=""></span>
-        <div class="card-img debugger">
-            <img src="https://picsum.photos/200/200" alt="test">
-        </div>
-        <div class="card-text debugger">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas fugit tempora quia veniam quaerat
-            doloribus eum inventore rerum voluptatibus reprehenderit.
-        </div>
-    </div>
-*/
