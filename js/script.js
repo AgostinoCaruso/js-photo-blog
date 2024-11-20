@@ -27,11 +27,20 @@ function FuncAxios() {
         .then((response) => {
             const photos = response.data;
 
-            for(let i = 0; i<photos.length; i++){
+            for (let i = 0; i < photos.length; i++) {
                 const urlImg = photos[i].url;
                 const urlText = photos[i].title;
-                const urlTextUppercase = urlText.charAt(0).toUpperCase() + urlText.slice(1);
-                
+                let urlTextUppercase = "";
+
+                for (let j = 0; j < urlText.length; j++) {
+                    const char = urlText[j];
+
+                    if (j == 0 || urlText[j - 1] == " ") {
+                        urlTextUppercase += char.toUpperCase();
+                    } else {
+                        urlTextUppercase += char;
+                    }
+                }
                 CreateCard(urlImg, urlTextUppercase);
             }
         })
@@ -62,7 +71,7 @@ function CreateCard(img, text) {
         event.stopPropagation();
 
         const elePin = card.querySelector(".pinAbsolute");
-        elePin.classList.toggle("my-d-none"); 
+        elePin.classList.toggle("my-d-none");
         eleOverlay.classList.toggle("my-d-none");
 
         if (!isCentered) {

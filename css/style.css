@@ -22,6 +22,7 @@ background-image: url("../img/wall.png");
 }
 main{
     margin-top: 30px;
+    padding: 0px 90px;
     position: relative;
 }
 /* header */
@@ -117,7 +118,7 @@ h1{
         font-size: 1.5em;
     }
     .card:hover{
-        /* transform: scale(1.2) rotate(30deg); */
+        transform: scale(1.1) rotate(15deg);
         box-shadow: 2px 2px 100px black;
     }
     .card.centered {
@@ -125,19 +126,24 @@ h1{
     }
     h1{
         font-size: var(--midFontSize);
+        padding: 20px 0px;
+
+    }
+    main{
+        padding: 0px 60px;
     }
 }
 @media screen and (max-width:492px) {
     .card{
         height: calc(100vw / 1);
         width: calc(( 100% - (1 * 44px) ) / 1);
-        transform: scale(1);
+        transform: scale(.9);
     }
     .card-text{
         font-size: 1.8em;
     }
     .card:hover{
-        /* transform: scale(1) rotate(30deg); */
+        transform: scale(1.1) rotate(15deg);
         box-shadow: 2px 2px 100px black;
     }
     .card.centered {
@@ -145,5 +151,6 @@ h1{
     }
     h1{
         font-size: var(--smallFontSize);
+        padding: 10px 0px;
     }
 }
