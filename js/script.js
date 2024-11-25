@@ -15,58 +15,81 @@ rendi la pagina responsive, in modo che su mobile e tablet le foto si dispongano
 
 const baseUrl = "https://jsonplaceholder.typicode.com/";
 const resource = "photos";
+const _limit = "?_limit=";
 const numImg = 6;
 const params = { "_limit": numImg };
 
+
 const eleDivContainer = document.querySelector(".container");
 const eleOverlay = document.querySelector(".overlay");
+const btnCreate = document.querySelector("#btn-create");
+const btnDelete = document.querySelector("#btn-delete");
+
+const cardArray = [];
+let activeCard = null;
+let activeCardIndex = -1;
 
 FuncAxios();
+//invoke on first page load
 function FuncAxios() {
-    axios.get(baseUrl + resource, { params })
+    axios.get(baseUrl + resource , {params})
         .then((response) => {
             const photos = response.data;
-
             for (let i = 0; i < photos.length; i++) {
+                const id = photos[i].id;
                 const urlImg = photos[i].url;
                 const urlText = photos[i].title;
                 let urlTextUppercase = "";
+                urlTextUppercase = WordsToUppercase(urlText, urlTextUppercase);//uppercase all first char words in a string
 
-                for (let j = 0; j < urlText.length; j++) {
-                    const char = urlText[j];
-
-                    if (j == 0 || urlText[j - 1] == " ") {
-                        urlTextUppercase += char.toUpperCase();
-                    } else {
-                        urlTextUppercase += char;
-                    }
-                }
-                CreateCard(urlImg, urlTextUppercase);
+                CreateCard(urlImg, urlTextUppercase, id);
             }
         })
         .catch((error) => {
             console.error("Errore nella chiamata API:", error);
         });
 }
-const template = "";
+//invoke on create card, just one
+function FuncAxiosRandom(num) {
+    axios.get(baseUrl + resource + _limit + num)
+        .then((response) => {
+            const photos = response.data;
+            const randomIndex = RandomNum(0, photos.length -1);
+            const photo = photos[randomIndex];
 
-function CreateCard(img, text) {
+            const id = photo.id;
+            const urlImg = photo.url;
+            const urlText = photo.title;
+            let urlTextUppercase = "";
+            console.log(urlText);
+            urlTextUppercase = WordsToUppercase(urlText, urlTextUppercase);//uppercase all first char words in a string
+
+            CreateCard(urlImg, urlTextUppercase, id);
+
+        })
+        .catch((error) => {
+            console.error("Errore nella chiamata API:", error);
+        });
+}
+function CreateCard(img, text, id) {
     const card = document.createElement("div");
     card.className = "card debugger";
 
     card.innerHTML = `
         <span class="pinAbsolute"><img src="./img/pin.svg" alt=""></span>
         <div class="card-img debugger">
-            <img src="${img}" alt="test">
+            <img src="${img}" alt="${text}">
         </div>
         <div class="card-text debugger">
             ${text}
         </div>
     `;
+
+    card.setAttribute("id", id); // add id from promise
+    card.setAttribute("data-index", cardArray.length); // save index based upon cardArray length
     eleDivContainer.appendChild(card);
 
-    let isCentered = false;
-
+    let isCentered = false; // Boolean for overlay card
     card.addEventListener("click", (event) => {
         event.stopPropagation();
 
@@ -76,10 +99,46 @@ function CreateCard(img, text) {
 
         if (!isCentered) {
             card.classList.add("centered");
-        } else {
+            activeCard = event.currentTarget;
+            activeCardIndex = parseInt(card.getAttribute("data-index"));
+        } else if(card!=null) {
             card.classList.remove("centered");
+            activeCard = null;
+            activeCardIndex= -1;
         }
-
         isCentered = !isCentered; // Alterna lo stato
     });
+    cardArray.push(card); // Aggiungi la card all'array
 }
+//EVENT
+btnCreate.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    FuncAxiosRandom(RandomNum(1, 999));
+});
+btnDelete.addEventListener("click", (event)=>{
+    event.stopPropagation();
+
+    eleOverlay.classList.toggle("my-d-none");
+    console.log(activeCard.id,"|=>",activeCardIndex);
+    activeCard.remove();// remove card from DOM
+    cardArray.splice(activeCardIndex, 1); // remove card from array
+    cardArray.forEach((card, i) => card.setAttribute("data-index", i));// Update index of remaning cards
+});
+//FUNCTION
+function WordsToUppercase(array, string) {
+    for (let i = 0; i < array.length; i++) {
+        const char = array[i];
+
+        if (i == 0 || array[i - 1] == " ") {
+            string += char.toUpperCase();
+        } else {
+            string += char;
+        }
+    }
+    return string;
+}
+function RandomNum(min, max) {
+    return Math.floor(Math.random() * max + min);
+}
+
